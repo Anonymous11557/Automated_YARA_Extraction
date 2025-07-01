@@ -135,14 +135,8 @@ def extract_yara_files(repo_path):
                     new_files.append(dest_path)
                     updated_seen[full_path] = mod_time
 
-    # if new_files:
-    #     python_exec = sys.executable 
-    #     print("Triggering feature extraction...")
-    #     subprocess.run([python_exec, "synchronized_script.py"])
-
     save_seen_files(updated_seen)
     return new_files
-
 
 
 def job():
