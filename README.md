@@ -1,8 +1,9 @@
 🛠️ How to Use This Repository
+
 📥 Cloning the Repository
 To clone this repository to your local machine, run:
 
-git clone 
+git clone https://github.com/Anonymous11557/Automated_YARA_Extraction.git
 
 🚀 Running the Project
 Once cloned, simply run the automated_script.py:
