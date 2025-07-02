@@ -94,17 +94,6 @@ def extract_yara_rules(yara_text):
             else:
                 rule_data['rule_name']
 
-
-        
-        # === META ===
-        # meta_match = re.search(r'meta:\s*(.*?)(?=^\s*(strings:|condition:|\}))', rule_body, re.DOTALL | re.IGNORECASE | re.MULTILINE)
-        # meta_block = meta_match.group(1) if meta_match else ""
-
-        # # Extract hashes from meta (searching for hex strings)
-        # meta_hashes = re.findall(r'"([a-fA-F0-9]{32,64})"', meta_block)
-        # rule_data['meta_hashes'] = meta_hashes if meta_hashes else []
-
-
         meta_match = re.search(r'meta:\s*(.*?)(?=^\s*(strings:|condition:|\}))', rule_body, re.DOTALL | re.IGNORECASE | re.MULTILINE)
         meta_block = meta_match.group(1) if meta_match else ""
         appeared_value = None
@@ -134,11 +123,6 @@ def extract_yara_rules(yara_text):
         if strings_match:
             strings_block = strings_match.group(1)
 
-            # Regex patterns
-            # regex_patterns = re.findall(r'/([^/]+)/', strings_block)
-            # if regex_patterns:
-            #     string_lines.extend(regex_patterns)
-
             # Plain text strings
             text_strings = re.findall(r'"(.*?)"', strings_block)
             string_lines.extend(text_strings)
@@ -159,7 +143,6 @@ def extract_yara_rules(yara_text):
         rule_data['condition'] = condition_block
 
         # Extract filesize expressions
-        # filesize_matches = re.findall(r'filesize\s*([<>=!]+)\s*([^\s\)]+)', condition_block)
         filesize_matches = re.findall(r'filesize\s*(==|!=|<=|>=|<|>)\s*([0-9]+(?:\.[0-9]+)?\s*(?:[kKmMgGtTpP][bB])?)', condition_block)
         filesize_conditions = [op + value.replace(" ", "") for op, value in filesize_matches]
         rule_data['filesize_conditions'] = filesize_conditions
@@ -188,18 +171,13 @@ def parse_yara_rule(file_path):
         hex_patterns = rule['hex_patterns']
         filesize = rule['filesize_conditions']
         date = rule['appeared'] 
-        # hashed_key = rule['meta_hashes']
+        
 
 
         # Split condition into parts (approximate logic statements)
         condition_elements = re.split(r'\band\b|\bor\b|\band\s+not\b|==|!=|>=|<=|<|>|[\n\r]', condition_raw)
         condition_elements = [c.strip() for c in condition_elements if c.strip()]
-        num_conditions = len(condition_elements)
-
-
-    
-        # Count .dll and .exe in strings
-        contains_exec = sum(1 for s in string_lines if s.lower().endswith(".exe") or s.lower().endswith(".dll"))
+        
 
         string_length = 0
         for value in rule['string_lines']:
