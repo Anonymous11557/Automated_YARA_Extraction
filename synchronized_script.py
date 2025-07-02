@@ -56,16 +56,16 @@ def extract_features_from_new_yara_files(seen_hashes):
             continue
 
         try:
-            # print(f"🔍 Parsing: {filename}")
+            
             parsed_rules = parse_yara_rule(filepath)
-            # print(f"✅ Parsed {len(parsed_rules)} rules")
+           
 
             for rule in parsed_rules:
                 features.append(rule)
                 labels.append("malware")  # You can customize this label if needed
 
             new_hashes.append(file_hash)
-            # print('Parsing Completed')
+            
 
         except Exception as e:
             print(f"Error parsing {filename}: {e}")
